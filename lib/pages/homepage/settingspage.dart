@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:ricovi/helpers/customthumb.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:ricovi/controller/settingscontroller.dart';
 import 'package:ricovi/helpers/customroute.dart';
@@ -8,6 +10,8 @@ import 'package:ricovi/helpers/textstyles.dart';
 import 'package:ricovi/pages/homepage/settings/accountpage.dart';
 import 'package:ricovi/pages/homepage/settings/schedulepage.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:ricovi/helpers/customDivider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -68,7 +72,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
                 child: settingItem('./lib/assets/icons/clock.svg', "Schedule",true,false,null),
               ),
-              settingItem('./lib/assets/icons/sleep.svg', "Sleep",true,false,null),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: (){
+                  sleepvalue(context, cnt);
+                },
+                child: settingItem('./lib/assets/icons/sleep.svg', "Sleep",true,false,null),
+              ),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: (){
@@ -76,7 +86,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
                 child: settingItem('./lib/assets/icons/comapre.svg', "Image transition effect",false,true,cnt.imagetrans.toString()),
               ),
-              settingItem('./lib/assets/icons/interval.svg', "Image interval",false,true,cnt.imginterval.toString()),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: (){
+                  imginterval(context,cnt);
+                },
+                child: settingItem('./lib/assets/icons/interval.svg', "Image interval",false,true,cnt.imginterval.toString()),
+              ),
               settingItem('./lib/assets/icons/wifi.svg', "Wifi Settings",false,true,cnt.wifiname.toString()),
               settingItem('./lib/assets/icons/integrations.svg', "Apps & Integrations",true,false,null),
               const SizedBox(height: 30,),
@@ -307,7 +323,158 @@ class _SettingsPageState extends State<SettingsPage> {
       )
     );
   }
+  RxDouble _thumbStrokeSliderValue = 10.0.obs;
+  imginterval(BuildContext context,settingscontroller cnt){
+    
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context, 
+      builder: (context)=>Container(
+        
+        padding: const EdgeInsets.fromLTRB(34, 23, 34, 15),
+        width: 366,
+        decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Image Interval",style: medium16().copyWith(fontWeight: FontWeight.w600),),
+            const SizedBox(height: 42,),
+            aboutitem("Sleep in", cnt.imginterval.value, false),
+            SfSliderTheme(
+              data: SfSliderThemeData(
+                inactiveDividerColor: Colors.grey.shade300,
+                activeDividerColor: Colors.black,
+                activeDividerStrokeWidth: 0,
+                activeDividerStrokeColor: Colors.deepOrange.withOpacity(0.24),
+                inactiveDividerStrokeWidth: 0,
+                inactiveDividerStrokeColor: Colors.grey,
+                activeTrackColor: Colors.black,
+                inactiveTrackColor: Colors.white,
+                overlayColor: Colors.black.withOpacity(0.12),
+                thumbColor: Colors.black,
+                thumbStrokeWidth: 2.0,
+                tooltipBackgroundColor: Colors.black,
+                thumbStrokeColor: Colors.black),
+              child: Obx(
+                ()=> SfSlider(
+                  interval: 1,
+                  stepSize: 1,
+                  showDividers: true,
+                  dividerShape: CustomDividerShape(),
+                  min: 0,
+                  max: 30,
+                  thumbShape: CustomThumbShape(),
+                  value: _thumbStrokeSliderValue.value,
+                  onChanged: (dynamic values) {
+                    print(_thumbStrokeSliderValue);
+                    setState(() {
+                      _thumbStrokeSliderValue.value = values as double;
+                    });
+                  },
+                  enableTooltip: false,
+                  numberFormat: NumberFormat('#')
+                )
+              )
+            ),
+            SizedBox(height: 22,),
 
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black,
+                  shadowColor: Colors.black87,
+                  elevation: 15,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  minimumSize: const Size.fromHeight(60),
+                ),
+                onPressed: (){
+                  cnt.changeimginterval(_thumbStrokeSliderValue.value);
+                  Navigator.of(context).pop();
+                  
+                },
+                
+                child: const Text('Set',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),)),
+          ],
+        ),
+      )
+    );
+  }
+
+  RxDouble _thumbsleepvalue = 10.0.obs;
+  sleepvalue(BuildContext context,settingscontroller cnt){
+    
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context, 
+      builder: (context)=>Container(
+        
+        padding: const EdgeInsets.fromLTRB(34, 23, 34, 15),
+        width: 366,
+        decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Image Interval",style: medium16().copyWith(fontWeight: FontWeight.w600),),
+            const SizedBox(height: 42,),
+            aboutitem("Sleep in", cnt.imginterval.value, false),
+            SfSliderTheme(
+              data: SfSliderThemeData(
+                inactiveDividerColor: Colors.grey.shade300,
+                activeDividerColor: Colors.black,
+                activeDividerStrokeWidth: 0,
+                activeDividerStrokeColor: Colors.deepOrange.withOpacity(0.24),
+                inactiveDividerStrokeWidth: 0,
+                inactiveDividerStrokeColor: Colors.grey,
+                activeTrackColor: Colors.black,
+                inactiveTrackColor: Colors.white,
+                overlayColor: Colors.black.withOpacity(0.12),
+                thumbColor: Colors.black,
+                thumbStrokeWidth: 2.0,
+                tooltipBackgroundColor: Colors.black,
+                thumbStrokeColor: Colors.black),
+              child: Obx(
+                ()=> SfSlider(
+                  interval: 1,
+                  stepSize: 1,
+                  showDividers: true,
+                  dividerShape: CustomDividerShape(),
+                  min: 0,
+                  max: 30,
+                  thumbShape: CustomThumbShape(),
+                  value: _thumbsleepvalue.value,
+                  onChanged: (dynamic values) {
+                    setState(() {
+                      _thumbsleepvalue.value = values as double;
+                    });
+                  },
+                  enableTooltip: false,
+                  numberFormat: NumberFormat('#')
+                )
+              )
+            ),
+            SizedBox(height: 22,),
+
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black,
+                  shadowColor: Colors.black87,
+                  elevation: 15,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  minimumSize: const Size.fromHeight(60),
+                ),
+                onPressed: (){
+                  
+                  Navigator.of(context).pop();
+                  
+                },
+                
+                child: const Text('Sleep',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),)),
+          ],
+        ),
+      )
+    );
+  }
 
   aboutbuilder(BuildContext context,settingscontroller cnt){
     
@@ -388,4 +555,10 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
+
+
+
+
+
+
 

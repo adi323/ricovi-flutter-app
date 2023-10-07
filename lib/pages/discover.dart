@@ -10,6 +10,8 @@ class Discover extends StatefulWidget {
 class _DiscoverState extends State<Discover> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(backgroundColor: Colors.red,);
+    return const Scaffold(
+      body: Center(child: Text("Discover"),),
+    );
   }
 }

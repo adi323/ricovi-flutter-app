@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ricovi/helpers/sharedPrefs.dart';
 
 class settingscontroller extends GetxController
 {
@@ -7,10 +8,18 @@ class settingscontroller extends GetxController
   RxString imagetrans="Fade".obs;
   RxString imginterval="10 mins".obs;
   RxString wifiname="Monoxide-5G".obs;
+  String name="",email="";
 
   @override
   void onInit() {
     super.onInit();
+    getsignedindata();
+  }
+
+  getsignedindata()async{
+    name=await authSave().getname();
+    email=await authSave().getemail();
+    update();
   }
 
   changedevicevalue(String s){
@@ -28,8 +37,8 @@ class settingscontroller extends GetxController
     update();
   }
 
-  changeimginterval(String s){
-    imginterval.value=s;
+  changeimginterval(double s){
+    imginterval.value='${s.toInt()} mins';
     update();
   }
 

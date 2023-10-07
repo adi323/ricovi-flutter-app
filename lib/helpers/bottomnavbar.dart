@@ -3,34 +3,38 @@ import 'package:ricovi/helpers/textstyles.dart';
 import 'package:svg_flutter/svg.dart';
 
 Widget bottomnavBar(TabController tc){
-  return SizedBox(
-    height: 180,
+  return AnimatedContainer(
+    duration: Duration(milliseconds: 20),
+    curve: Curves.easeInOut,
+    height: 100,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        GestureDetector(
-          onTap: (){
-
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal:25,vertical: 15),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.85),boxShadow: [BoxShadow(offset: Offset(0, 0),color: Colors.black26.withOpacity(0.3),)]),
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Now Playing", style: medium12().copyWith(color: Colors.black45),),
-                    SizedBox(height: 8,),
-                    Text("Landscape From Library", style: medium16(),),
+        Visibility(
+          visible: false,
+          child: GestureDetector(
+            onTap: (){
+             },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal:25,vertical: 15),
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.85),boxShadow: [BoxShadow(offset: Offset(0, 0),color: Colors.black26.withOpacity(0.3),)]),
+              height: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Now Playing", style: medium12().copyWith(color: Colors.black45),),
+                      SizedBox(height: 8,),
+                      Text("Landscape From Library", style: medium16(),),
+                    ],
+                  ),
+                  SvgPicture.asset('./lib/assets/slider.svg',height: 54,width: 54,),
                   ],
-                ),
-                SvgPicture.asset('./lib/assets/slider.svg',height: 54,width: 54,),
-                ],
-            ),
+              ),
+            )
           )
         ),
         Container(
@@ -95,7 +99,7 @@ Widget bottomnavBar(TabController tc){
                 },
                 child: navbarIcon('./lib/assets/discovery.svg', 'Discover',tc.index==4),
               ),
-             ],
+              ],
           ),
         )
       ],

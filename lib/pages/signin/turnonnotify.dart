@@ -74,7 +74,7 @@ class _TurnonNotifyState extends State<TurnonNotify> {
                 minimumSize: const Size.fromHeight(60),
               ),
               onPressed: (){
-                  Navigator.of(context).pushReplacement(CustomRoute(child: PersonalizeExperience(),time:Duration(milliseconds: 1200)));
+                  Navigator.of(context).push(CustomRoute(child: PersonalizeExperience(),time:Duration(milliseconds: 1200)));
               },
               
               child: Text('Turn on',style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),)),

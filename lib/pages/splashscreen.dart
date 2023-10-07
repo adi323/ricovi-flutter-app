@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ricovi/helpers/customroute.dart';
+import 'package:ricovi/helpers/sharedPrefs.dart';
 import 'package:ricovi/pages/navhome.dart';
 import 'package:ricovi/pages/signin/signinpages.dart';
 import 'package:svg_flutter/svg.dart';
@@ -16,12 +17,25 @@ class _SplashScreenState extends State<SplashScreen> {
   double _width = 0;
   double _height = 0;
   bool loggedin=false;
+  String token="";
+
+  getsignedindata()async{
+
+    token=(await authSave().gettoken())??"";
+    print(token!="");
+
+  }
+
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    getsignedindata();
+    
+
     Timer(Duration(milliseconds: 100),(){
       setState(() {
         print(_height);
@@ -31,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     });
     Timer(const Duration(milliseconds: 1500), () {
-      Navigator.of(context).pushReplacement(CustomRoute(child: !loggedin?navHomepage():navHomepage(),time:Duration(milliseconds: 1200)));
+      Navigator.of(context).pushReplacement(CustomRoute(child: token==""?SigninPage():navHomepage(),time:Duration(milliseconds: 1200)));
     });
   }
 

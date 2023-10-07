@@ -41,13 +41,13 @@ class _AccountPageState extends State<AccountPage> {
 
             Text('Name',style: medium14().copyWith(color: Colors.black,fontWeight: FontWeight.w600),textAlign: TextAlign.left,),
             SizedBox(height: 10,),
-            Text('Minhaz Majumder',style: medium16().copyWith(color: Colors.black45,),textAlign: TextAlign.left,),
+            Text(cnt.name,style: medium16().copyWith(color: Colors.black45,),textAlign: TextAlign.left,),
             
             SizedBox(height: 30,),
 
             Text('Change Email Address',style: medium14().copyWith(color: Colors.black,fontWeight: FontWeight.w600),textAlign: TextAlign.left,),
             SizedBox(height: 10,),
-            Text('adityanandi5589@gmail.com',style: medium16().copyWith(color: Colors.black45,),textAlign: TextAlign.left,),
+            Text(cnt.email,style: medium16().copyWith(color: Colors.black45,),textAlign: TextAlign.left,),
             
 
             SizedBox(height: 30,),

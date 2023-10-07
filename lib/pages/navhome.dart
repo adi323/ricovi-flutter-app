@@ -56,7 +56,7 @@ class _navHomepageState extends State<navHomepage> with TickerProviderStateMixin
         children: [
           NewHomePage(),
           AppPage(tc: tc,),
-          AiPage(),
+          AiPage(tc: tc,),
           Playlists(),
           Discover()
         ],
@@ -66,7 +66,7 @@ class _navHomepageState extends State<navHomepage> with TickerProviderStateMixin
       
       /**/
       
-      bottomNavigationBar: bottomnavBar(tc),
+      bottomNavigationBar: tc.index==0?bottomnavBar(tc):SizedBox(),
     );
   }
 

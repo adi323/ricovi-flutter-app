@@ -16,6 +16,10 @@ TextStyle bold24(){
   return const TextStyle(fontSize: 24,fontWeight: FontWeight.w600,color: Colors.black);
 }
 
+TextStyle bold36(){
+  return const TextStyle(fontSize: 36,fontWeight: FontWeight.w600,color: Colors.black);
+}
+
 TextStyle medium20(){
   return const TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.black);
 }

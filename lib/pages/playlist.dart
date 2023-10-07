@@ -11,7 +11,7 @@ class _PlaylistsState extends State<Playlists> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Colors.blueAccent,
+      body: Center(child: Text("Playlists"),),
     );
   }
 }

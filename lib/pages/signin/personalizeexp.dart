@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:ricovi/helpers/customroute.dart';
-import 'package:ricovi/pages/setuppages/setupframe.dart';
+import 'package:ricovi/helpers/textstyles.dart';
+import 'package:ricovi/pages/walkthrough/walkthrough_page1.dart';
 
 class PersonalizeExperience extends StatefulWidget {
   const PersonalizeExperience({super.key});
@@ -107,7 +108,7 @@ class _PersonalizeExperienceState extends State<PersonalizeExperience> {
                                     end: Alignment.bottomCenter
                                   )),
                                 padding: const EdgeInsets.all(10),
-                                child: Text(key,textAlign: TextAlign.center,)
+                                child: Text(key,textAlign: TextAlign.center,style: medium14().copyWith(color: Colors.white),)
                               ),
                               
                             ],
@@ -129,7 +130,7 @@ class _PersonalizeExperienceState extends State<PersonalizeExperience> {
                 minimumSize: const Size.fromHeight(60),
               ),
               onPressed: (){
-                  Navigator.of(context).pushReplacement(CustomRoute(child: SetupFrame(),time:Duration(milliseconds: 1200)));
+                  Navigator.of(context).pushAndRemoveUntil(CustomRoute(child: WalkthroughPage1(),time:Duration(milliseconds: 1200)),(Route<dynamic> route) => false);
               },
               
               child: const Text('Select',style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),)),

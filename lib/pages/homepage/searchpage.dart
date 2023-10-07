@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
         body: ListView(
           padding: EdgeInsets.all(30),
           children: [
-            Text('My Account',style: bold24(),textAlign: TextAlign.left,),
+            Text('Search',style: bold24(),textAlign: TextAlign.left,),
             SizedBox(height: 20,),
             TextFormField(
               controller: txt,
