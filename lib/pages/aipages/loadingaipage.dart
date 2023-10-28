@@ -7,8 +7,8 @@ import 'package:ricovi/helpers/textstyles.dart';
 import 'package:ricovi/pages/aipages/aiimageresult.dart';
 
 class LoadingAiPage extends StatefulWidget {
-  const LoadingAiPage({super.key});
-
+  LoadingAiPage({super.key,required this.text});
+  String text;
   @override
   State<LoadingAiPage> createState() => _LoadingAiPageState();
 }
@@ -24,7 +24,7 @@ class _LoadingAiPageState extends State<LoadingAiPage> {
     super.initState();
     
     Timer(const Duration(milliseconds: 1500), () {
-      Navigator.of(context).pushReplacement(CustomRoute(child: AiImageResult(),time:Duration(milliseconds: 1200)));
+      Navigator.of(context).pushReplacement(CustomRoute(child: AiImageResult(text: widget.text,),time:Duration(milliseconds: 1200)));
     });
   }
 

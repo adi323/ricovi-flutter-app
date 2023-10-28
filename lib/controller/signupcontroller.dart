@@ -1,16 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ricovi/helpers/customroute.dart';
+import 'package:ricovi/models/otpverify.dart';
+import 'package:ricovi/models/respModel.dart';
+import 'package:ricovi/networking/apiclient.dart';
 import 'package:ricovi/helpers/sharedPrefs.dart';
 import 'package:ricovi/models/Loginstatus.dart';
-import 'package:ricovi/models/SignupStatus.dart';
 import 'package:ricovi/pages/navhome.dart';
+import 'package:ricovi/pages/signin/forgotpassword.dart';
 import 'package:ricovi/pages/signin/otpscreen.dart';
+import 'package:ricovi/pages/signin/signinpages.dart';
 import 'package:ricovi/pages/signin/signupdetailspage.dart';
 import 'package:ricovi/pages/signin/turnonnotify.dart';
+
 
 
 class SignupController extends GetxController{
@@ -23,9 +28,37 @@ class SignupController extends GetxController{
   int otp=0;
   late String token;
   final RxBool _signin=true.obs;
-  final _connect = GetConnect();
-  final String baseurl="http://ec2-13-126-91-30.ap-south-1.compute.amazonaws.com:8003/api";
-  final headers = {"Accept": "application/json"};
+  
+  var client=ApiClient();
+  
+
+  signup()async{
+    
+    ResponseModel res=await client.signup(email: emailfield, password: passwordfield);
+    if(!res.hasError){
+      await authSave().signupUser(emailfield);
+      return true;
+    }
+    
+
+    return false;
+    
+  }
+
+  callforgotpasswordapi(BuildContext context)async{
+
+    ResponseModel res=await client.forgotpassword(email: email.text);
+    if(!res.hasError){
+      Navigator.of(context).push(CustomRoute(child: OtpScreen(forgot: true,email: email.text,),time:const Duration(milliseconds: 1200)));
+      
+    }
+    
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Incorrect Email/Password attempt"),duration: Duration(milliseconds: 500),backgroundColor: Colors.redAccent,)
+    );
+  }
+
 
   getsignin(){
     return _signin.value;
@@ -37,168 +70,121 @@ class SignupController extends GetxController{
   }
 
   login()async{
-    var loginurl=baseurl+'/user/login';
-    Map<String,String> body={
-      "email":emailfield,
-      "password":passwordfield
-    };
-    
-    
-    //'email=abcd@gmail.com&password=12345678';
-    
-    var res=await _connect.post(
-      loginurl, 
-      body,
-      contentType: 'application/x-www-form-urlencoded',
-      headers: headers
 
-    );
-    print(res.bodyString);
-    if(res.statusCode==201){
-      var result=LoginStatus.fromJson(jsonDecode(res.bodyString.toString()) as Map<String,dynamic>);
-      await authSave().loginUser(result);
-      return authSave().isloggedin();
+    ResponseModel res=await client.login(email: emailfield, password: passwordfield);
+    print(res.data);
+    if(!res.hasError){
+      var result=LoginStatus.fromJson(jsonDecode(res.data.toString()) as Map<String,dynamic>);
+      if(!(result.isError!)){
+        await authSave().loginUser(result);
+        return 1;
+      }else{
+        return 2;
+      }
+      
     }
-
-    return false;    
+    return 0;
+     
   }
 
-  resendotp()async{
-    var loginurl=baseurl+'/user/login';
-    Map<String,String> body={
-      "email":emailfield,
-      "password":passwordfield
-    };
-    
-    
-    
-    var res=await _connect.post(
-      loginurl, 
-      body,
-      contentType: 'application/x-www-form-urlencoded',
-      headers: headers
+  resendotp(bool k)async{
 
-    );
-    print(res.bodyString);
-    if(res.statusCode==200){
-      otp=jsonDecode(res.bodyString.toString())['data']['otp']['otp'];
-    }
-    update();
-  }
 
-  signup()async{
-    var signupurl=baseurl+'/user/signup';
-    Map<String,String> body={
-      "email":emailfield,
-      "password":passwordfield,
-    };
-    
-    var res=await _connect.post(
-      signupurl, 
-      body,
-      contentType: 'application/x-www-form-urlencoded',
-      headers: headers
-
-    );
-    print(res.bodyString);
-    if(res.statusCode==200){
-      var result=SignupStatus.fromJson(jsonDecode(res.bodyString.toString()) as Map<String,dynamic>);
-      otp=result.data!.otp!.otp!;
-      await authSave().signupUser(result);
+    ResponseModel res=await client.resendOTP(email: email.text,mode:k?'forgotpassword':'verify');
+    print(res.data);
+    if(!res.hasError){
+      
       return true;
     }
+    
 
     return false;
     
   }
 
+  
+
 
   signupbuttonpressed(context)async{
     emailfield=email.text;
     passwordfield=password.text;
-    //print(emailfield);
-    if(emailfield.isEmpty || passwordfield.isEmpty){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email/Pasword Empty"),duration: Duration(milliseconds: 500),backgroundColor: Colors.redAccent,)
-      );
-      //return ;
-    }
+    
+    
+    
+    
     
     if(_signin.value){
-      bool p=await login();
-      if(p)
-        Navigator.of(context).push(CustomRoute(child: const navHomepage(),time:const Duration(milliseconds: 1200)));
-
-      else{
+      int p=(await login())??0;
+      if(p!=0) {
+        Navigator.of(context).push(CustomRoute(child: p==1?const navHomepage():OtpScreen(email: email.text,forgot: false,),time:const Duration(milliseconds: 1200)));
+      } else{
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Incorrect Email/Password attempt"),duration: Duration(milliseconds: 500),backgroundColor: Colors.redAccent,)
         );
       }
     }else{
       //signup();
-      bool p=await signup();
-      print(p);
-      if(p)
-        Navigator.of(context).push(CustomRoute(child: const OtpScreen(),time:const Duration(milliseconds: 1200)));
-      else{
+      bool p=(await signup())?? false;
+      
+      if(p) {
+        Navigator.of(context).push(CustomRoute(child: OtpScreen(forgot: false,email: emailfield,),time:const Duration(milliseconds: 1200)));
+      } else{
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Error Occured"),duration: Duration(milliseconds: 500),backgroundColor: Colors.redAccent,)
+          const SnackBar(content: Text("Email already registered"),duration: Duration(milliseconds: 500),backgroundColor: Colors.redAccent,)
         );
       }
     }
     
   }
 
-  verify(BuildContext context,String p,Timer _timer)async{
-    var signupurl=baseurl+'/user/otp-verify';
-    Map<String,String> body={
-      "email":emailfield,
-      "mode":"verify",
-      "otp":p
-    };
+  verify(BuildContext context,int otp,Timer _timer,bool k)async{
     
-    var res=await _connect.post(
-      signupurl, 
-      body,
-      contentType: 'application/x-www-form-urlencoded',
-      headers: headers
 
-    );
-    print(res.bodyString);
-    if(res.statusCode==201){
-      _timer.cancel();
-      token=jsonDecode(res.bodyString.toString())['data']['token'];
-      authSave().savetoken(token);
-      Navigator.of(context).push(CustomRoute(child: SignupDetailsPage(),time:Duration(milliseconds: 1200)));
+    ResponseModel res=await client.otpVerify(email: email.text, OTP: otp,mode: k?'forgotpassword':'verify');
+    print(res.data);
+    if(!res.hasError){
+      
+      if(!k){
+        var result=LoginStatus.fromJson(jsonDecode(res.data.toString()) as Map<String,dynamic>);
+        await authSave().loginUser(result);
+        Navigator.of(context).push(CustomRoute(child: SignupDetailsPage(),time:const Duration(milliseconds: 1200)));
+      }
+      else{
+        var result=otpverify.fromJson(jsonDecode(res.data.toString()) as Map<String,dynamic>);
+        Navigator.of(context).push(CustomRoute(child: ForgotPasswordScreen(token: result.data!.token ??''),time:const Duration(milliseconds: 1200)));
+        //await authSave().(result);
+      }
+      
     }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("wrong OTP"),duration: Duration(milliseconds: 500),backgroundColor: Colors.redAccent,)
+    );
+
   }
 
 
-  updateme(BuildContext context)async{
-    var signupurl=baseurl+'/user';
-    Map<String,String> body={
-      "name":name.text,
-      "phone":phone.text,
-      "countryCode":"+1"
-      
-    };
-    print(body);
-    var res=await _connect.put(
-      signupurl, 
-      body,
-      contentType: 'application/x-www-form-urlencoded',
-      headers: {"Accept": "application/json","Authorization":'Bearer ${token}'}
-
-    );
-    print(res.bodyString);
-    if(res.statusCode==201){
-      
-      authSave().updatename(name.text, phone.text);
-      Navigator.of(context).push(CustomRoute(child: TurnonNotify(),time:Duration(milliseconds: 1200)));
-    }
-
-
+  changepassword(BuildContext context,String password,String token)async{
     
+    ResponseModel res=await client.resetpassword(token: token,password: password);
+    print(res.data);
+    if(!res.hasError){
+       Navigator.of(context).pushAndRemoveUntil(CustomRoute(child: SigninPage(),time:const Duration(milliseconds: 500)), (Route<dynamic> route) => false);
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Does not match"),duration: Duration(milliseconds: 500),backgroundColor: Colors.redAccent,)
+    );
+  }
+
+  updateme(BuildContext context,String countryCode)async{
+
+    String token=await authSave().gettoken();
+    ResponseModel res=await client.updateUser(phone: int.parse(phone.text),name: name.text,countryCode: countryCode,token: token);
+    print(res.data);
+    if(!res.hasError){
+      authSave().updatename(name.text, phone.text);
+       Navigator.of(context).push(CustomRoute(child: TurnonNotify(),time:const Duration(milliseconds: 1200)));
+    }
 
   }
 

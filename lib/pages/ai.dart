@@ -45,7 +45,7 @@ class _AiPageState extends State<AiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight:0,
+        toolbarHeight:50,
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -71,7 +71,8 @@ class _AiPageState extends State<AiPage> {
               alignment: Alignment.bottomRight,
               children: [
                 TextFormField(
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16),
+                  controller: txt,
+                  style: TextStyle(color: Colors.black54,fontWeight: FontWeight.w400,fontSize: 16),
                   cursorColor: Colors.black,
                   inputFormatters: [
                     new LengthLimitingTextInputFormatter(250),
@@ -100,6 +101,7 @@ class _AiPageState extends State<AiPage> {
                       minimumSize: const Size(110, 40),
                     ),
                     onPressed: (){
+                      txt.text="Anime girl in realistic look Accent Lighting, A winding path illuminated by a million stars, vivid and rich colors, bright studio";
                         //Navigator.of(context).pushReplacement(CustomRoute(child: _signin?navHomepage():OtpScreen(),time:Duration(milliseconds: 1200)));
                     },
                     
@@ -197,7 +199,7 @@ class _AiPageState extends State<AiPage> {
                 minimumSize: const Size.fromHeight(60),
               ),
               onPressed: (){
-                  Navigator.of(context).push(CustomRoute(child: LoadingAiPage(),time:Duration(milliseconds: 1200)));
+                Navigator.of(context).push(CustomRoute(child: LoadingAiPage(text: txt.text,),time:Duration(milliseconds: 1200)));
               },
               
               child: Text('Generate',style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),)),

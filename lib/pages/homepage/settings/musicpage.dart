@@ -10,6 +10,8 @@ class BackgroundMusic extends StatefulWidget {
 class _BackgroundMusicState extends State<BackgroundMusic> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(child: Text("Music Page is under dev"),),
+    );
   }
 }

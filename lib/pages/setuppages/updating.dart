@@ -17,11 +17,12 @@ class UpdatingPage extends StatefulWidget {
 
 class _UpdatingPageState extends State<UpdatingPage> {
   bool v=false;
+  late Timer _timer;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(
+    _timer =Timer(
       Duration(seconds: 3),
       () {
         if(!v){
@@ -75,6 +76,7 @@ class _UpdatingPageState extends State<UpdatingPage> {
                     ),
                     onPressed: (){
                         //Navigator.of(context).pop();
+                        _timer.cancel();
                         Navigator.of(context).pushAndRemoveUntil(CustomRoute(child: navHomepage(),time:Duration(milliseconds: 1200)),(Route<dynamic> route) => false);
                     },
                     
@@ -88,6 +90,7 @@ class _UpdatingPageState extends State<UpdatingPage> {
                       fixedSize: Size(MediaQuery.sizeOf(context).width*0.4,50)
                     ),
                     onPressed: (){
+                      _timer.cancel();
                         Navigator.of(context).pushAndRemoveUntil(CustomRoute(child: navHomepage(),time:Duration(milliseconds: 1200)),(Route<dynamic> route) => false);
                     },
                     

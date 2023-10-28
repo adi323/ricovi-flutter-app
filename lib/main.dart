@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       
       themeMode: ThemeMode.light,
-      theme: ThemeData.light(),
+      theme: ThemeData.light().copyWith(scaffoldBackgroundColor: Color(0xFFFCFCFC)),
       home: const SplashScreen(),
     );
   }

@@ -22,10 +22,10 @@ class authSave{
 
   }
 
-  signupUser(SignupStatus ls)async{
+  signupUser(String email)async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("isloggedIn", false);
-    await prefs.setString("email", ls.data!.email!);
+    await prefs.setString("email", email);
 
 
   }

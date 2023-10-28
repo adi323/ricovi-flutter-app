@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:ricovi/helpers/customroute.dart';
 import 'package:ricovi/pages/homepage/notifypage.dart';
 import 'package:ricovi/pages/homepage/searchpage.dart';
@@ -26,12 +25,6 @@ class _NewHomePageState extends State<NewHomePage> {
     "Cars":'https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 
   };
-  final iconList = <IconData>[
-    LineIcons.home,
-    LineIcons.appStore,
-    LineIcons.apperSystemsAb,
-    LineIcons.accusoft
-  ];
   List<String> headings=["From our library","New from artist you like","Your playlists"];
   
 

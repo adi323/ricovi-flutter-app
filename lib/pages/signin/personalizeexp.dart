@@ -73,18 +73,16 @@ class _PersonalizeExperienceState extends State<PersonalizeExperience> {
                       String key=categories.keys.elementAt(index);
                       return GestureDetector(
                         onTap: (){
-                          if(allcatsel.length<5){
-                            setState(() {
-                              if(allcatsel.contains(key))
-                                allcatsel.remove(key);
-                              else{
-                                allcatsel.add(key);
-                              }
-                            });
+                          if(allcatsel.contains(key))
+                              allcatsel.remove(key);
+                          else if(allcatsel.length<5){
+                            
+                            allcatsel.add(key);
+                            
                           }
-                        },
-                        onDoubleTap: (){
-                          print(allcatsel);
+                          setState(() {
+                            
+                          });
                         },
                         child: Container(
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
@@ -102,13 +100,21 @@ class _PersonalizeExperienceState extends State<PersonalizeExperience> {
                                 curve: Curves.bounceInOut,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
-                                  gradient: LinearGradient(
-                                    colors: allcatsel.contains(key)?[Colors.transparent,Colors.green.shade800]:[Colors.transparent,Colors.black54],
+                                  gradient:const LinearGradient(
+                                    colors: [Colors.transparent,Colors.black26,Colors.black54],
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter
                                   )),
                                 padding: const EdgeInsets.all(10),
                                 child: Text(key,textAlign: TextAlign.center,style: medium14().copyWith(color: Colors.white),)
+                              ),
+
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child:allcatsel.contains(key)?
+                                  Checkbox(value: allcatsel.contains(key),activeColor: Colors.white.withOpacity(0.8),checkColor: Colors.black,onChanged: (value){},shape: CircleBorder(),)
+                                  :SizedBox()
                               ),
                               
                             ],

@@ -50,15 +50,15 @@ class _navHomepageState extends State<navHomepage> with TickerProviderStateMixin
       ),
       backgroundColor: Colors.white,
       body: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: tc,
         
         children: [
-          NewHomePage(),
+          const NewHomePage(),
           AppPage(tc: tc,),
           AiPage(tc: tc,),
-          Playlists(),
-          Discover()
+          const Playlists(),
+          const Discover()
         ],
       ),
       
@@ -66,7 +66,7 @@ class _navHomepageState extends State<navHomepage> with TickerProviderStateMixin
       
       /**/
       
-      bottomNavigationBar: tc.index==0?bottomnavBar(tc):SizedBox(),
+      bottomNavigationBar: tc.index<1||tc.index>2?bottomnavBar(tc):null,
     );
   }
 
